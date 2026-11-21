@@ -44,6 +44,7 @@ class ElvanFoodsApp {
     if (newLang !== 'en' && newLang !== 'hi') return;
     this.lang = newLang;
     localStorage.setItem('elvan_lang', newLang);
+    document.documentElement.lang = newLang;
     this.renderHeader();
     this.renderBrandsShowcase();
     this.renderFlavorWheel();
@@ -53,9 +54,6 @@ class ElvanFoodsApp {
     this.renderFooter();
     this.renderCartUI();
     updateJarSliderLabels();
-  }
-    document.documentElement.lang = newLang;
-    this.renderAll();
     this.showToast(this.lang === 'en' ? 'Switched to English' : 'भाषा हिंदी में बदली गई');
   }
 
@@ -280,8 +278,6 @@ class ElvanFoodsApp {
     setTimeout(() => {
       window.jarSliderInstance = new AgrumeaJarSlider('hero-section');
     }, 10);
-  }
-    }, 50);
   }
 
   // 7 MASTER BRANDS SHOWCASE
