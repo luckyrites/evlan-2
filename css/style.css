@@ -43,6 +43,25 @@
   --shadow-hover: 0 30px 60px -20px rgba(38, 10, 14, 0.16), 0 0 1px 1px rgba(232, 78, 27, 0.15);
 }
 
+/* Brand Card Styling */
+.brand-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px -12px rgba(179, 19, 41, 0.18), 0 0 1px 1px rgba(232, 78, 27, 0.2);
+}
+
+.modal-sku-pill {
+  transition: all 0.2s ease;
+}
+
+.modal-sku-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 /* Base Styles */
 * {
   margin: 0;
