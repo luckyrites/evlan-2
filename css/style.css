@@ -1,10 +1,14 @@
 /* ==========================================================================
-   AGRUMEA FARM - LUXURY SICILIAN ARTISANAL CITRUS PANTRY
-   Awwwards SOTD-Inspired Editorial Design System
+   AGRUMEA FARM / ELVAN FOODS - LUXURY ARTISANAL PANTRY DESIGN SYSTEM
+   Awwwards Site-of-the-Day Award-Winning Editorial Atmosphere
    ========================================================================== */
 
 :root {
-  /* Signature Brand Palette */
+  /* Signature Brand Colors (matching agrumeafarm.it) */
+  --color-orange: #e94e1b;
+  --color-border: #762530;
+  --color-white: #fdf3eb;
+  --color-yellow: #f39200;
   --color-burgundy-950: #260a0e;
   --color-burgundy-900: #46151b;
   --color-burgundy-800: #5c1c24;
@@ -12,14 +16,14 @@
   --color-burgundy-600: #8d2e3b;
   --color-burgundy-100: #f7e8ea;
   
-  --color-citrus-500: #e84e1b;
+  --color-citrus-500: #e94e1b;
   --color-citrus-400: #f06838;
   --color-citrus-600: #cf3d0d;
   --color-citrus-100: #ffeedf;
   
   --color-cream-50: #ffffff;
   --color-cream-100: #fdfbf7;
-  --color-cream-200: #fbf7ee;
+  --color-cream-200: #fdf3eb;
   --color-cream-300: #f5eedf;
   --color-cream-400: #ece1cc;
   --color-cream-500: #ddccb0;
@@ -27,62 +31,448 @@
   --color-olive-800: #21352c;
   --color-olive-700: #2d4a3e;
   --color-olive-600: #3a5e50;
-  --color-olive-100: #e5ede9;
 
   --color-terracotta: #c86446;
   --color-gold: #c59b27;
-  --color-earth: #1e1b18;
+  --color-earth: #260a0e;
   --color-earth-muted: #6e675f;
 
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-serif: "Italiana", "Playfair Display", Georgia, serif;
   --font-display: "Italiana", "Playfair Display", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-luxury: 0 20px 40px -15px rgba(38, 10, 14, 0.08), 0 0 1px 1px rgba(118, 37, 48, 0.05);
   --shadow-hover: 0 30px 60px -20px rgba(38, 10, 14, 0.16), 0 0 1px 1px rgba(232, 78, 27, 0.15);
+
+  /* Jar Slider Geometry & Viewport Variables (Exact match to Agrumea Farm) */
+  --jar-marquee-top: 52%;
+  --jar-marquee-w: 240vw;
+  --jar-marquee-h: 580px;
+  --jar-marquee-angle: 9.5deg;
+  --jar-item-w: 210px;
+  --jar-item-h: 336px;
 }
 
 /* ==========================================================================
-   3D ARTISANAL GLASS JAR SHOWCASE (Modeled after agrumeafarm.it)
+   MINIMALIST FLOATING LUXURY HEADER (Modeled directly after agrumeafarm.it)
    ========================================================================== */
-.jar-stage {
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 22px clamp(20px, 3.5vw, 50px);
+  pointer-events: none;
+  transition: background-color 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
 }
 
-.jar-card-wrap {
+.site-header.is-scrolled {
+  background: rgba(253, 243, 235, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(118, 37, 48, 0.1);
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.site-header__bar > * {
+  pointer-events: auto;
+}
+
+/* Language Switcher */
+.site-lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-burgundy-900);
+}
+
+.site-lang-switcher__item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  color: rgba(70, 21, 27, 0.5);
+  transition: color 0.2s ease;
+  font-weight: 700;
+}
+
+.site-lang-switcher__item.is-active,
+.site-lang-switcher__item:hover {
+  color: var(--color-citrus-500);
+}
+
+/* Brand Wordmark */
+.site-header__brand {
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+
+.site-header__brand-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--color-burgundy-950);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.site-header__brand-sub {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.5625rem;
+  letter-spacing: 0.26em;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--color-citrus-500);
+  margin-top: 3px;
+}
+
+/* Header Action Buttons */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-pantry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--color-burgundy-900);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(70, 21, 27, 0.15);
+}
+
+.site-pantry-btn:hover {
+  background: var(--color-citrus-500);
+  transform: translateY(-1px);
+}
+
+.site-pantry-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-burgundy-900);
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.site-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(118, 37, 48, 0.25);
+  background: rgba(253, 243, 235, 0.8);
+  color: var(--color-burgundy-900);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.site-audio-btn:hover {
+  border-color: var(--color-citrus-500);
+  color: var(--color-citrus-500);
+}
+
+/* ==========================================================================
+   FULL-SCREEN HERO JAR SLIDER (1:1 with agrumeafarm.it)
+   ========================================================================== */
+.jar-slider {
+  background: var(--color-white);
+  height: 100vh;
+  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  user-select: none;
+}
+
+/* Giant Burgundy Organic Silhouette at the bottom */
+.jar-slider__shape-layer {
+  inset: auto 50% 0;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: center bottom;
+  width: clamp(760px, 84vw, 1500px);
+  z-index: 1;
+}
+
+.jar-slider__shape-image {
+  transform: scale(0.98);
+  transform-origin: center bottom;
+  width: 100%;
+  display: block;
+}
+
+/* Rotating Sunburst / Monogram Badge inside the hill */
+.jar-slider__badge {
+  aspect-ratio: 1;
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 78%;
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.jar-slider__badge-artwork {
+  height: 100%;
+  width: 100%;
+  animation: sunBadgeRotate 70s linear infinite;
+  display: block;
+}
+
+@keyframes sunBadgeRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Floating Bottom Prompt */
+.jar-slider__overlay {
+  display: grid;
+  inset: 0;
+  padding-bottom: clamp(24px, 4vw, 45px);
+  place-items: end center;
+  pointer-events: none;
+  position: absolute;
+  z-index: 5;
+}
+
+.jar-slider__prompt {
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.95;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.jar-slider__prompt-arrow {
+  display: inline-block;
+  animation: promptArrowBounce 1.8s ease-in-out infinite;
+  font-size: 1.1rem;
+  color: var(--color-yellow);
+}
+
+@keyframes promptArrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* Marquee Ribbon Track (Angled at 10deg) */
+.jar-slider__wrapper {
+  cursor: grab;
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  touch-action: none;
+  z-index: 3;
+}
+
+.jar-slider__wrapper:active {
+  cursor: grabbing;
+}
+
+.jar-slider__marquee {
+  height: var(--jar-marquee-h);
+  left: 50%;
+  position: absolute;
+  top: var(--jar-marquee-top);
+  transform: translate(-50%, -50%) rotate(var(--jar-marquee-angle));
+  width: var(--jar-marquee-w);
+}
+
+.jar-slider__track {
+  height: 100%;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  will-change: transform;
+}
+
+/* Individual Artisanal Jar Card */
+.jar-slider__item {
+  cursor: pointer;
+  height: var(--jar-item-h);
+  width: var(--jar-item-w);
+  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: calc(var(--jar-item-h) / -2);
+  will-change: transform, filter;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+  filter: drop-shadow(0 25px 30px rgba(45, 12, 16, 0.24));
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 }
 
-.jar-3d-box {
+.jar-slider__item:hover {
+  filter: drop-shadow(0 40px 50px rgba(232, 78, 27, 0.4));
+  z-index: 50;
+}
+
+.jar-slider__img-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.jar-vessel {
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  transition: box-shadow 0.3s ease;
+.jar-slider__base {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
 }
 
-.jar-3d-box:hover .jar-vessel {
-  box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 35px 60px -12px rgba(179, 19, 41, 0.25), 0 0 20px rgba(255,255,255,0.4) !important;
+/* Artisanal Craft Label Overlay */
+.jar-slider__label {
+  position: absolute;
+  bottom: 23%;
+  left: 50%;
+  transform: translateX(-50%) translateZ(8px);
+  width: 68%;
+  background: rgba(253, 243, 235, 0.96);
+  border: 1px solid rgba(118, 37, 48, 0.35);
+  box-shadow: 0 6px 14px rgba(38, 10, 14, 0.12);
+  padding: 6px 8px;
+  text-align: center;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
-.jar-lid {
-  transform: translateZ(10px);
+.jar-slider__item:hover .jar-slider__label {
+  background: #ffffff;
+  border-color: var(--color-citrus-500);
+  box-shadow: 0 8px 20px rgba(232, 78, 27, 0.25);
+  transform: translateX(-50%) translateZ(16px);
 }
 
-.jar-label {
-  transform: translateZ(6px);
+.jar-slider__label-brand {
+  font-family: var(--font-sans);
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-citrus-500);
+  line-height: 1;
 }
 
-.jar-glare {
-  mix-blend-mode: overlay;
+.jar-slider__label-title {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-burgundy-950);
+  line-height: 1.15;
+  margin-top: 2px;
 }
+
+.jar-slider__label-weight {
+  font-family: var(--font-sans);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-earth-muted);
+  margin-top: 2px;
+}
+
+/* Follower Cursor Pill */
+.jar-cursor-pill {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--color-citrus-500);
+  color: var(--color-white);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 25px rgba(232, 78, 27, 0.4);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.jar-cursor-pill.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.jar-cursor-pill.is-jar-hover {
+  background: var(--color-burgundy-900);
+  box-shadow: 0 12px 30px rgba(70, 21, 27, 0.5);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Mobile Adjustments for Jar Slider */
+@media (max-width: 768px) {
+  :root {
+    --jar-marquee-top: 50%;
+    --jar-marquee-w: 320vw;
+    --jar-item-w: 160px;
+    --jar-item-h: 256px;
+    --jar-marquee-angle: 8deg;
+  }
+  .jar-slider__shape-layer {
+    width: 140vw;
+  }
+  .jar-slider__badge {
+    width: 90%;
+    top: 22%;
+  }
+}
+
 
 /* Brand Card Styling */
 .brand-card {

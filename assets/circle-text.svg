@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" fill="none" width="1000" height="1000">
+  <defs>
+    <!-- Outer Text Circular Path -->
+    <path id="outerCircle" d="M 500, 500 m -400, 0 a 400,400 0 1,1 800,0 a 400,400 0 1,1 -800,0" />
+    <!-- Inner Text Circular Path -->
+    <path id="innerCircle" d="M 500, 500 m -290, 0 a 290,290 0 1,1 580,0 a 290,290 0 1,1 -580,0" />
+    <style>
+      .badge-text-primary {
+        font-family: 'Italiana', 'Playfair Display', Georgia, serif;
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: 12px;
+        fill: #e94e1b;
+        text-transform: uppercase;
+      }
+      .badge-text-secondary {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 16px;
+        fill: #f39200;
+        text-transform: uppercase;
+      }
+    </style>
+  </defs>
+
+  <!-- Concentric Decorative Starburst / Rings -->
+  <circle cx="500" cy="500" r="435" stroke="#e94e1b" stroke-width="1.5" stroke-dasharray="4 8" opacity="0.6" />
+  <circle cx="500" cy="500" r="345" stroke="#762530" stroke-width="2" opacity="0.3" />
+  <circle cx="500" cy="500" r="230" stroke="#e94e1b" stroke-width="2" />
+  <circle cx="500" cy="500" r="222" stroke="#f39200" stroke-width="1" stroke-dasharray="6 6" />
+
+  <!-- Center Heritage Seal -->
+  <g transform="translate(500, 500)">
+    <!-- 8-Pointed Heritage Floral Star -->
+    <path d="M 0,-140 L 35,-45 L 140,0 L 35,45 L 0,140 L -35,45 L -140,0 L -35,-45 Z" fill="#e94e1b" opacity="0.15" />
+    <!-- Monogram / Center Crest -->
+    <circle cx="0" cy="0" r="75" fill="#762530" />
+    <circle cx="0" cy="0" r="70" stroke="#f39200" stroke-width="1.5" fill="none" />
+    <text x="0" y="24" text-anchor="middle" font-family="'Italiana', 'Playfair Display', Georgia, serif" font-size="78" font-weight="900" fill="#fdf3eb">E</text>
+  </g>
+
+  <!-- Outer Ring Text -->
+  <text class="badge-text-primary">
+    <textPath href="#outerCircle" startOffset="0%">
+      ★ ELVAN FOODS ★ HERITAGE OF TASTE ★ ARTISANAL PANTRY ★ EST. 1994 ★ 
+    </textPath>
+  </text>
+
+  <!-- Inner Ring Subtitle Text -->
+  <text class="badge-text-secondary">
+    <textPath href="#innerCircle" startOffset="0%">
+      • PURE TRADITION • NATURAL CONDIMENTS • INDIAN TERROIR • 
+    </textPath>
+  </text>
+</svg>

@@ -6,7 +6,7 @@
 import { PRODUCTS, CATEGORIES, FLAVOR_PROFILES, SKU_VARIANTS } from './products.js';
 import { BRANDS } from './brandLogos.js';
 import { TRANSLATIONS } from './translations.js';
-import { JarsShowcase } from './jars3d.js';
+import { AgrumeaJarSlider, updateJarSliderLabels } from './jars3d.js';
 import { soundscape } from './soundscape.js';
 
 class ElvanFoodsApp {
@@ -26,10 +26,6 @@ class ElvanFoodsApp {
   }
 
   init() {
-    window.addEventListener('DOMContentLoaded', () => {
-      this.jarsShowcase = new JarsShowcase('jars-showcase-container');
-    });
-
     this.renderAll();
     this.setupGlobalListeners();
   }
@@ -48,6 +44,16 @@ class ElvanFoodsApp {
     if (newLang !== 'en' && newLang !== 'hi') return;
     this.lang = newLang;
     localStorage.setItem('elvan_lang', newLang);
+    this.renderHeader();
+    this.renderBrandsShowcase();
+    this.renderFlavorWheel();
+    this.renderProductCatalog();
+    this.renderPackagingMatrix();
+    this.renderNewsletter();
+    this.renderFooter();
+    this.renderCartUI();
+    updateJarSliderLabels();
+  }
     document.documentElement.lang = newLang;
     this.renderAll();
     this.showToast(this.lang === 'en' ? 'Switched to English' : 'भाषा हिंदी में बदली गई');
@@ -203,52 +209,42 @@ class ElvanFoodsApp {
 
     const count = this.cart.reduce((sum, i) => sum + i.quantity, 0);
 
+    el.className = "site-header";
     el.innerHTML = `
-      <div class="container-farm flex items-center justify-between py-3.5">
-        <!-- Logo -->
-        <a href="#hero" class="flex items-center gap-3.5 group text-decoration-none">
-          <div class="w-10 h-10 rounded-full bg-citrus-500 flex items-center justify-center text-white font-serif font-black text-xl shadow-md group-hover:scale-105 transition-transform">
-            E
+      <div class="site-header__bar">
+        <!-- Language Switcher (Left) -->
+        <div class="site-header__side site-header__side--start">
+          <nav class="site-lang-switcher" aria-label="Language switcher">
+            <button class="site-lang-switcher__item ${this.lang === 'en' ? 'is-active' : ''}" data-lang="en">EN</button>
+            <span style="opacity: 0.35;">/</span>
+            <button class="site-lang-switcher__item ${this.lang === 'hi' ? 'is-active' : ''}" data-lang="hi">HI</button>
+          </nav>
+        </div>
+
+        <!-- Brand Wordmark (Center) -->
+        <div class="site-header__center">
+          <a href="#hero-section" class="site-header__brand" aria-label="Elvan Foods">
+            <span class="site-header__brand-title">ELVAN FOODS</span>
+            <span class="site-header__brand-sub">Artisanal Pantry • Est. 1994</span>
+          </a>
+        </div>
+
+        <!-- Right Actions: Sound & Pantry Cart -->
+        <div class="site-header__side site-header__side--end">
+          <div class="site-header__actions">
+            <!-- Soundscape Ambient Audio -->
+            <button id="soundscape-toggle" class="site-audio-btn" title="Toggle Nature Audio" aria-label="Ambient sound">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/>
+              </svg>
+            </button>
+
+            <!-- Pantry Cart Trigger Pill -->
+            <a href="#pantry-section" id="cart-drawer-trigger" class="site-pantry-btn" aria-label="View Pantry">
+              <span>PANTRY</span>
+              <span id="cart-badge-count" class="site-pantry-badge">${count}</span>
+            </a>
           </div>
-          <div>
-            <div class="font-display text-2xl tracking-wide text-burgundy-950 font-black leading-tight">ELVAN FOODS</div>
-            <div class="text-[0.625rem] font-sans tracking-[0.24em] text-earth-muted uppercase font-bold">7 Master Brands • 47 Products</div>
-          </div>
-        </a>
-
-        <!-- Desktop Nav -->
-        <nav class="hidden xl:flex items-center gap-6 text-xs font-bold tracking-[0.12em] uppercase text-earth">
-          <a href="#brands" class="hover:text-citrus-500 transition-colors">${this.t('nav.brands')}</a>
-          <a href="#pantry" class="hover:text-citrus-500 transition-colors">${this.t('nav.pantry')}</a>
-          <a href="#tasting" class="hover:text-citrus-500 transition-colors">${this.t('nav.tasting')}</a>
-          <a href="#packaging" class="hover:text-citrus-500 transition-colors">${this.t('nav.packaging')}</a>
-          <a href="#trade" class="hover:text-citrus-500 transition-colors">${this.t('nav.b2b')}</a>
-        </nav>
-
-        <!-- Right Utilities -->
-        <div class="flex items-center gap-3">
-          <!-- Audio Toggle -->
-          <button id="soundscape-toggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cream-400 text-[0.7rem] uppercase font-bold text-earth hover:border-citrus-500 transition-all bg-cream-100">
-            <span class="flex items-center gap-0.5 h-3">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-            </span>
-            <span class="hidden sm:inline" id="sound-label">${soundscape.isPlaying ? this.t('nav.soundOn') : this.t('nav.soundOff')}</span>
-          </button>
-
-          <!-- EN / HI Language Switcher -->
-          <div class="flex items-center rounded-full p-0.5 bg-cream-300 border border-cream-400 text-xs font-bold">
-            <button class="lang-btn px-2.5 py-1 rounded-full transition-all ${this.lang === 'en' ? 'bg-burgundy-800 text-white shadow-sm' : 'text-earth hover:text-citrus-500'}" data-lang="en">EN</button>
-            <button class="lang-btn px-2.5 py-1 rounded-full transition-all ${this.lang === 'hi' ? 'bg-burgundy-800 text-white shadow-sm' : 'text-earth hover:text-citrus-500'}" data-lang="hi">HI</button>
-          </div>
-
-          <!-- Order / Cart Trigger -->
-          <button id="cart-drawer-trigger" class="relative flex items-center gap-2 px-4 py-2 rounded-full bg-burgundy-800 hover:bg-burgundy-900 text-white text-xs font-bold tracking-wider uppercase transition-all shadow-md">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-            <span class="hidden md:inline">${this.t('nav.cart')}</span>
-            <span id="cart-badge-count" class="w-5 h-5 rounded-full bg-citrus-500 text-white text-[0.675rem] flex items-center justify-center font-bold">${count}</span>
-          </button>
         </div>
       </div>
     `;
@@ -258,85 +254,33 @@ class ElvanFoodsApp {
     if (soundBtn) {
       soundBtn.addEventListener('click', () => {
         const active = soundscape.toggle();
-        const lbl = document.getElementById('sound-label');
-        if (lbl) lbl.textContent = active ? this.t('nav.soundOn') : this.t('nav.soundOff');
         this.showToast(active ? '🌿 Soundscape Active' : 'Muted');
       });
     }
 
-    el.querySelectorAll('.lang-btn').forEach(b => {
-      b.addEventListener('click', e => this.setLanguage(e.target.getAttribute('data-lang')));
+    el.querySelectorAll('.site-lang-switcher__item').forEach(b => {
+      b.addEventListener('click', e => {
+        this.setLanguage(e.target.getAttribute('data-lang'));
+      });
     });
 
     const cartTrigger = document.getElementById('cart-drawer-trigger');
-    if (cartTrigger) cartTrigger.addEventListener('click', () => this.openCart());
+    if (cartTrigger) {
+      cartTrigger.addEventListener('click', (e) => {
+        if (this.cart.length > 0) {
+          e.preventDefault();
+          this.openCart();
+        }
+      });
+    }
   }
 
   renderHero() {
-    const el = document.getElementById('hero-section');
-    if (!el) return;
-
-    el.innerHTML = `
-      <div class="container-farm pt-8 pb-14 md:pt-14 md:pb-20">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          <div class="lg:col-span-6 space-y-5">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-citrus-100 border border-citrus-500/30 text-citrus-700 text-xs font-bold uppercase tracking-wider">
-              <span class="w-2 h-2 rounded-full bg-citrus-500 animate-pulse"></span>
-              ${this.t('hero.tag')}
-            </div>
-
-            <h1 class="font-display text-4xl sm:text-5xl xl:text-6xl text-burgundy-950 font-normal leading-[1.14]">
-              ${this.t('hero.titleStart')} <span class="italic font-serif text-citrus-500 underline decoration-cream-500 decoration-wavy underline-offset-8 font-bold">${this.t('hero.titleHighlight')}</span> ${this.t('hero.titleEnd')}
-            </h1>
-
-            <p class="text-earth/80 text-base md:text-lg max-w-xl leading-relaxed">
-              ${this.t('hero.desc')}
-            </p>
-
-            <div class="flex flex-wrap items-center gap-4 pt-2">
-              <a href="#brands" class="btn-primary">
-                ${this.t('hero.ctaBrands')}
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-              </a>
-              <a href="#pantry" class="btn-secondary">
-                ${this.t('hero.ctaCatalog')}
-              </a>
-            </div>
-
-            <!-- Stats Bar -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-6 border-t border-cream-400">
-              <div>
-                <div class="font-display text-3xl font-black text-burgundy-900">${this.t('hero.stat1Number')}</div>
-                <div class="text-[0.675rem] font-bold uppercase tracking-widest text-earth-muted mt-0.5">${this.t('hero.stat1Label')}</div>
-              </div>
-              <div>
-                <div class="font-display text-3xl font-black text-citrus-500">${this.t('hero.stat2Number')}</div>
-                <div class="text-[0.675rem] font-bold uppercase tracking-widest text-earth-muted mt-0.5">${this.t('hero.stat2Label')}</div>
-              </div>
-              <div>
-                <div class="font-display text-3xl font-black text-olive-700">${this.t('hero.stat3Number')}</div>
-                <div class="text-[0.675rem] font-bold uppercase tracking-widest text-earth-muted mt-0.5">${this.t('hero.stat3Label')}</div>
-              </div>
-              <div>
-                <div class="font-display text-3xl font-black text-burgundy-900">${this.t('hero.stat4Number')}</div>
-                <div class="text-[0.675rem] font-bold uppercase tracking-widest text-earth-muted mt-0.5">${this.t('hero.stat4Label')}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Interactive 3D Artisanal Glass Jar Showcase (Modeled after agrumeafarm.it) -->
-          <div class="lg:col-span-6 flex flex-col items-center justify-center relative">
-            <div id="jars-showcase-container" class="relative z-10 w-full flex items-center justify-center"></div>
-          </div>
-
-        </div>
-      </div>
-    `;
-
-    // Initialize or refresh Jars Showcase
+    // Mount the AgrumeaJarSlider directly into hero-section
     setTimeout(() => {
-      this.jarsShowcase = new JarsShowcase('jars-showcase-container');
+      window.jarSliderInstance = new AgrumeaJarSlider('hero-section');
+    }, 10);
+  }
     }, 50);
   }
 
