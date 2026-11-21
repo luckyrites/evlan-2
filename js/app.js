@@ -6,7 +6,7 @@
 import { PRODUCTS, CATEGORIES, FLAVOR_PROFILES, SKU_VARIANTS } from './products.js';
 import { BRANDS } from './brandLogos.js';
 import { TRANSLATIONS } from './translations.js';
-import { CitrusVisualizer } from './citrus3d.js';
+import { JarsShowcase } from './jars3d.js';
 import { soundscape } from './soundscape.js';
 
 class ElvanFoodsApp {
@@ -27,7 +27,7 @@ class ElvanFoodsApp {
 
   init() {
     window.addEventListener('DOMContentLoaded', () => {
-      this.visualizer = new CitrusVisualizer('citrus-canvas-container');
+      this.jarsShowcase = new JarsShowcase('jars-showcase-container');
     });
 
     this.renderAll();
@@ -278,9 +278,9 @@ class ElvanFoodsApp {
 
     el.innerHTML = `
       <div class="container-farm pt-8 pb-14 md:pt-14 md:pb-20">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <div class="lg:col-span-7 space-y-6">
+          <div class="lg:col-span-6 space-y-5">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-citrus-100 border border-citrus-500/30 text-citrus-700 text-xs font-bold uppercase tracking-wider">
               <span class="w-2 h-2 rounded-full bg-citrus-500 animate-pulse"></span>
               ${this.t('hero.tag')}
@@ -325,24 +325,19 @@ class ElvanFoodsApp {
             </div>
           </div>
 
-          <!-- 3D Interactive Canvas -->
-          <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div class="relative w-full aspect-square max-w-[420px] flex items-center justify-center">
-              <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-citrus-500/25 via-burgundy-700/10 to-transparent blur-3xl animate-glow"></div>
-              <div id="citrus-canvas-container" class="relative z-10 w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"></div>
-              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 px-3.5 py-1.5 rounded-full bg-cream-100/90 backdrop-blur-md border border-cream-400 shadow-sm text-[0.675rem] font-bold tracking-wide text-earth-muted text-center whitespace-nowrap">
-                ${this.t('hero.interactive3DHint')}
-              </div>
-            </div>
+          <!-- Right: Interactive 3D Artisanal Glass Jar Showcase (Modeled after agrumeafarm.it) -->
+          <div class="lg:col-span-6 flex flex-col items-center justify-center relative">
+            <div id="jars-showcase-container" class="relative z-10 w-full flex items-center justify-center"></div>
           </div>
 
         </div>
       </div>
     `;
 
-    if (!this.visualizer) {
-      this.visualizer = new CitrusVisualizer('citrus-canvas-container');
-    }
+    // Initialize or refresh Jars Showcase
+    setTimeout(() => {
+      this.jarsShowcase = new JarsShowcase('jars-showcase-container');
+    }, 50);
   }
 
   // 7 MASTER BRANDS SHOWCASE
