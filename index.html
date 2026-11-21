@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elvan Foods | Organic Sicilian Citrus & Artisanal Gourmet Pantry</title>
+  
+  <meta name="description" content="Elvan Foods: Immersive organic citrus farming from the volcanic soils of Syracuse, Sicily. Handcrafted artisanal marmalades, pure pistachio & almond creams, cold-pressed EVO oil, and fresh citrus." />
+  
+  <!-- Favicon with Sicilian Citrus Motif -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23E84E1B'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23762530' opacity='0.35'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23FBF7EE'/%3E%3Cpath d='M16 3 Q21 0 24 2 Q23 7 18 6' fill='%232D4A3E'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts for Italian Luxury & Modern Editorial Design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN for reactive utility rendering -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            citrus: {
+              100: '#ffeedf',
+              200: '#fed7aa',
+              400: '#f06838',
+              500: '#E84E1B',
+              600: '#cf3d0d',
+              700: '#a82c06',
+            },
+            burgundy: {
+              100: '#f7e8ea',
+              700: '#762530',
+              800: '#5c1c24',
+              900: '#46151b',
+              950: '#260a0e',
+            },
+            cream: {
+              50: '#ffffff',
+              100: '#fdfbf7',
+              200: '#fbf7ee',
+              300: '#f5eedf',
+              400: '#ece1cc',
+              500: '#ddccb0',
+            },
+            olive: {
+              100: '#e5ede9',
+              600: '#3a5e50',
+              700: '#2d4a3e',
+              800: '#21352c',
+            },
+            gold: '#c59b27',
+            terracotta: '#c86446',
+            earth: {
+              DEFAULT: '#1e1b18',
+              muted: '#6e675f',
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+            display: ['"Italiana"', '"Playfair Display"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Three.js CDN for 3D Citrus Interactive Experience -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Canvas Confetti for Celebration on Order Completion -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet with Luxury Editorial Touches -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-cream-200 text-earth font-sans selection:bg-citrus-500 selection:text-white antialiased">
+
+  <!-- Sticky Glass Header -->
+  <header id="main-header" class="sticky top-0 z-50 glass-header transition-all"></header>
+
+  <!-- Main Content Layout -->
+  <main>
+    <!-- Hero Section -->
+    <section id="hero-section" class="relative overflow-hidden"></section>
+
+    <!-- Sensory Tasting Wheel & Flavor Constellation -->
+    <section id="tasting-section"></section>
+
+    <!-- Product Catalog & Pantry -->
+    <section id="pantry-section"></section>
+
+    <!-- 50-Year Farm Heritage Story -->
+    <section id="story-section"></section>
+
+    <!-- The Syracuse Terroir & Volcanic Climate -->
+    <section id="terroir-section"></section>
+
+    <!-- Seasonal Harvest Calendar -->
+    <section id="harvest-section"></section>
+
+    <!-- The Agrumea Circle Newsletter & Voucher -->
+    <section id="newsletter-section"></section>
+  </main>
+
+  <!-- Luxury Editorial Footer -->
+  <footer id="main-footer"></footer>
+
+  <!-- Slide-out Cart Drawer -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <aside id="cart-drawer" class="cart-drawer-panel">
+    <!-- Drawer Top Header -->
+    <div class="p-5 border-b border-cream-400 flex items-center justify-between bg-cream-50">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-citrus-500"></span>
+        <h3 class="font-serif font-bold text-lg text-burgundy-950">Dispensa Elvan Foods</h3>
+      </div>
+      <button class="p-1.5 rounded-full text-earth-muted hover:text-citrus-600 transition-colors" onclick="window.app.closeCart()" title="Close Cart">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Reactive Dynamic Cart Content -->
+    <div id="cart-drawer-content" class="flex-1 flex flex-col overflow-hidden"></div>
+  </aside>
+
+  <!-- Product Quick-View Modal -->
+  <div id="product-modal" class="modal-container">
+    <div class="modal-content-card">
+      <button id="modal-close-btn" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-cream-200 text-earth hover:text-citrus-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors" title="Close">
+        ✕
+      </button>
+      <div id="modal-product-body"></div>
+    </div>
+  </div>
+
+  <!-- Simulated Checkout Modal -->
+  <div id="checkout-modal" class="modal-container">
+    <div class="modal-content-card max-w-xl">
+      <button id="checkout-modal-close-btn" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-cream-200 text-earth hover:text-citrus-600 flex items-center justify-center font-bold text-sm shadow-sm transition-colors" title="Close">
+        ✕
+      </button>
+      <div id="checkout-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notice Element -->
+  <div id="toast-notice" class="toast-notice"></div>
+
+  <!-- Application Entry Point -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

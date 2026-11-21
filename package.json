@@ -1,0 +1,22 @@
+{
+  "name": "elvan-foods",
+  "version": "1.0.0",
+  "description": "Elvan Foods - Organic Sicilian Citrus & Artisanal Gourmet Pantry",
+  "type": "module",
+  "main": "serve.js",
+  "scripts": {
+    "start": "node serve.js",
+    "serve": "node serve.js"
+  },
+  "keywords": [
+    "citrus",
+    "sicily",
+    "organic",
+    "food",
+    "ecommerce",
+    "threejs",
+    "awwwards"
+  ],
+  "author": "Elvan Foods",
+  "license": "MIT"
+}
