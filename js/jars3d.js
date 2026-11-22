@@ -223,6 +223,17 @@ export class AgrumeaJarSlider {
     this.cursorPill = document.getElementById("jar-cursor-pill");
     this.cursorText = document.getElementById("jar-cursor-text");
 
+    // Click on "Scroll or Drag to Discover" smoothly scrolls to next section
+    const promptBtn = this.container.querySelector(".jar-slider__prompt");
+    if (promptBtn) {
+      promptBtn.addEventListener("click", () => {
+        const nextSection = document.getElementById("brands-section") || document.getElementById("pantry-section");
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    }
+
     // Populate track with jars
     this.itemElements = [];
     this.items.forEach((jar, index) => {
@@ -279,13 +290,20 @@ export class AgrumeaJarSlider {
     window.addEventListener("pointerup", (e) => this.onPointerUp(e));
     window.addEventListener("pointercancel", (e) => this.onPointerUp(e));
 
-    // Mouse wheel support
+    // Mouse wheel support:
+    // Only capture horizontal delta (trackpad side-swipe or shift+wheel) for jar carousel.
+    // Allow vertical delta (standard mouse wheel down/up) to scroll the page naturally!
     this.wrapper.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      this.velocity -= delta * 0.08;
-      // Clamp max velocity
-      this.velocity = Math.max(Math.min(this.velocity, 25), -25);
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        // Horizontal scroll: move the jars
+        e.preventDefault();
+        this.velocity -= e.deltaX * 0.08;
+        this.velocity = Math.max(Math.min(this.velocity, 25), -25);
+      } else {
+        // Vertical wheel: also gently nudge the jars, but DO NOT preventDefault!
+        // The browser will naturally scroll down the webpage into the pantry!
+        this.velocity -= e.deltaY * 0.015;
+      }
     }, { passive: false });
 
     // Header scroll background toggle
@@ -302,31 +320,67 @@ export class AgrumeaJarSlider {
   }
 
   onPointerDown(e) {
-    this.isDragging = true;
+    this.isPointerDown = true;
+    this.isDragging = false;
+    this.gestureLocked = false;
+    this.isVerticalGesture = false;
+
     this.startX = e.clientX;
+    this.startY = e.clientY;
     this.lastX = e.clientX;
+    this.lastY = e.clientY;
     this.dragDistance = 0;
     this.lastTime = performance.now();
     this.velocity = 0;
   }
 
   onPointerMove(e) {
-    if (!this.isDragging) return;
-    const now = performance.now();
-    const dt = Math.max(now - this.lastTime, 1);
-    const dx = e.clientX - this.lastX;
-    
-    this.offset += dx;
-    this.dragDistance += Math.abs(dx);
-    this.velocity = (dx / dt) * 16; // Project to 60fps velocity
+    if (!this.isPointerDown) return;
 
-    this.lastX = e.clientX;
-    this.lastTime = now;
+    const dx = e.clientX - this.lastX;
+    const dy = e.clientY - this.lastY;
+    const totalDx = Math.abs(e.clientX - this.startX);
+    const totalDy = Math.abs(e.clientY - this.startY);
+
+    // Lock gesture direction once movement exceeds threshold (7px)
+    if (!this.gestureLocked && (totalDx > 7 || totalDy > 7)) {
+      this.gestureLocked = true;
+      if (totalDy > totalDx) {
+        // User is swiping vertically to scroll the page down/up!
+        this.isVerticalGesture = true;
+        this.isDragging = false;
+        return;
+      } else {
+        // User is swiping horizontally to scroll between jars!
+        this.isVerticalGesture = false;
+        this.isDragging = true;
+      }
+    }
+
+    if (this.isVerticalGesture) {
+      // Allow browser native vertical scrolling to handle it smoothly
+      return;
+    }
+
+    if (this.isDragging) {
+      const now = performance.now();
+      const dt = Math.max(now - this.lastTime, 1);
+      
+      this.offset += dx;
+      this.dragDistance += Math.abs(dx);
+      this.velocity = (dx / dt) * 16; // Project to 60fps velocity
+
+      this.lastX = e.clientX;
+      this.lastY = e.clientY;
+      this.lastTime = now;
+    }
   }
 
   onPointerUp() {
-    if (!this.isDragging) return;
+    this.isPointerDown = false;
     this.isDragging = false;
+    this.gestureLocked = false;
+    this.isVerticalGesture = false;
   }
 
   onJarMouseMove(e, itemEl, jar) {
